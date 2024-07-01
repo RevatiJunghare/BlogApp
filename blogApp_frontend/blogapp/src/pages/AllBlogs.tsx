@@ -23,6 +23,7 @@ const AllBlogs = ()=>{
     const getblogs = ()=>{
        dispatch(BlogActions.GETALLBLOGS())
         .then((res)=>{
+          console.log("res",res)
             setData(res?.payload?.data?.allBlogs)
         })
         .catch((err)=>{
@@ -61,6 +62,7 @@ const AllBlogs = ()=>{
        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[editData])
     
+    console.log("datalength",data)
   return <WrapperBlog>
     <div>
         <button onClick={()=>toggleDrawer()}>Create Blog</button>

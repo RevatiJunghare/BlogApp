@@ -1,4 +1,5 @@
-import axios from "axios"
+import axios from "axios";
+import {REACT_APP_API_URL} from "../../common"
 
 class BlogNetworkservice{
    static getallblogs(){
@@ -12,8 +13,8 @@ class BlogNetworkservice{
 
 
 class Endpoints{
-    static allblogs = "http://localhost:4500/all-blogs";
-    static editBlog = "http://localhost:4500/update-blog"
+    static allblogs = `${REACT_APP_API_URL}/all-blog`;
+    static editBlog = `${REACT_APP_API_URL}/update-blog`
 }
 
 export default BlogNetworkservice
