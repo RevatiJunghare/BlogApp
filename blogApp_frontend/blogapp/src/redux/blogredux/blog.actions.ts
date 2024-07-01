@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { REACT_APP_API_URL } from "../../common";
 
 class BlogActions{
     static GETALLBLOGS = createAsyncThunk("BlogSlice/GETALLBLOGS",()=>{
@@ -50,12 +51,11 @@ class BlogActions{
 }
 
 
-
 class Endpoints{
-    static allblogs = "http://localhost:4500/all-blogs";
-    static deleteblog = "http://localhost:4500/delete";
-    static editBlog  = "http://localhost:4500/update-blog";
-    static createBlog = "http://localhost:4500/create-post"
+    static allblogs = `${REACT_APP_API_URL}/all-blogs`;
+    static deleteblog = `${REACT_APP_API_URL}/delete`;
+    static editBlog  = `${REACT_APP_API_URL}/update-blog`;
+    static createBlog = `${REACT_APP_API_URL}/create-post`;
 }
 
 

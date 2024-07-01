@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
-import BlogSliceReducer from './blogredux/blog.slice'
+import BlogSliceReducer from './blogredux/blog.slice';
+import AuthSliceReducer from "./authredux/auth.slice"
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export const store = configureStore({
     reducer:{
-        blogreducer:BlogSliceReducer
+        blogreducer:BlogSliceReducer,
+        auth:AuthSliceReducer
        },
        middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
