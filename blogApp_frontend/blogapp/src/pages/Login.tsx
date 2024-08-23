@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextField, Button, Stack } from "@mui/material";
+import { TextField, Button} from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../redux/store";
 import { Authactions } from "../redux/authredux/auth.actions";
@@ -8,63 +8,54 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Signup = () => {
+const Login = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+    const navigate = useNavigate()
+    const [userinput,setUserinput] = useState({
+        email:"",
+        password:""
+    })
 
-  const [userinput, setUserinput] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    dispatch(Authactions.SIGNUPACTION(userinput))
-      .then((res: any) => {
-        if (res?.payload?.status === 200) {
+  
+  const handleSubmit = (e:any)=>{
+    e.preventDefault()
+    dispatch(Authactions.LOGINACTION(userinput))
+     .then((res)=>{
+       if(res?.payload?.status === 200){
+         localStorage.setItem("token",res?.payload?.data?.token)
+        //  alert(localStorage.getItem("token"))
           toast.success(res?.payload?.data?.message, {
-            onClose: () => navigate("/login"),
+            onClose: () => navigate("/allblogs"),
           });
-        } else if (res?.payload?.response?.status === 400) {
-          toast.error(res?.payload?.response?.data?.message);
-        } else {
-          toast.error("something went wrong");
-        }
-      })
-      .catch((err) => {
-        console.log("err", err);
-      })
-      .finally(() => {});
-  };
+       }
+       else if(res?.payload?.response?.status === 400){
+        toast.error(res?.payload?.response?.data?.message )
+       }
+       else{
+        toast.error("something went wrong")
+       }
+     })
+     .catch((err)=>{
+      console.log("err",err)
+     })
+     .finally(()=>{})
+}
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setUserinput((prev: any) => ({
+  const handleChange = (e:any)=>{
+    const {name,value} = e.target
+    setUserinput((prev:any)=>({
       ...prev,
-      [name]: value,
-    }));
-  };
+      [name]:value
+    }))
+ }
 
   return (
     <>
       <GlobalStyle />
       <Wrapsignup>
-        <h2>Register Form</h2>
+        <h2>Login Form</h2>
         <form onSubmit={handleSubmit}>
-          <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            <TextField
-              type="text"
-              variant="outlined"
-              color="secondary"
-              label="Enter Full Name"
-              name="name"
-              onChange={handleChange}
-              value={userinput.name}
-              fullWidth
-              required
-            />
-          </Stack>
+          
           <TextField
             type="email"
             variant="outlined"
@@ -77,6 +68,7 @@ const Signup = () => {
             required
             sx={{ mb: 4 }}
           />
+          
           <TextField
             type="password"
             variant="outlined"
@@ -89,13 +81,14 @@ const Signup = () => {
             fullWidth
             sx={{ mb: 4 }}
           />
+          
 
           <Button variant="outlined" color="secondary" type="submit">
-            Register
+            Login
           </Button>
         </form>
         <small>
-          Already have an account? <Link to="/login">Login Here</Link>
+          Don't have an account? <Link to="/signup">Signup First</Link>
         </small>
       </Wrapsignup>
       <ToastContainer />
@@ -103,7 +96,7 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Login;
 
 const Wrapsignup = styled.div`
   padding: 20px;

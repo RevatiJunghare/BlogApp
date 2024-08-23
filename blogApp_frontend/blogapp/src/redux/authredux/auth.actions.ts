@@ -8,7 +8,18 @@ export class Authactions{
             return res
           })
           .catch((err)=>{
-            console.log("error in signup action",err)
+            return err
+          })
+          .finally(()=>{})
+    })
+
+    static LOGINACTION = createAsyncThunk("AuthSlice/LOGINACTION",(data:any)=>{
+        return axios.post(`${Endpoints.LoginAPI}`,data)
+          .then((res:any)=>{
+            return res
+          })
+          .catch((err)=>{
+            return err
           })
           .finally(()=>{})
     })
@@ -16,5 +27,6 @@ export class Authactions{
 
 
 class Endpoints{
-    static SignupAPI = "http://localhost:4500/signup"
+    static SignupAPI = "http://localhost:4500/auth/signup";
+    static LoginAPI = "http://localhost:4500/auth/login";
 }

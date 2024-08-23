@@ -1,16 +1,17 @@
 import "./App.css";
-import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import AllRoutes from "./pages/AllRoutes";
 //import AllBlogs from "./pages/AllBlogs";
-import Signup from "./pages/Signup";
+//import Signup from "./pages/Signup";
+//import Login from "./pages/Login";
 
 function App() {
   return (
     <>
-      <Provider store={store}>
+      
         {/* <AllBlogs /> */}
-        <Signup/>
-      </Provider>
+        {/* <Signup/> */}
+        {/* <Login/> */}
+     <AllRoutes/>
       
     </>
   );

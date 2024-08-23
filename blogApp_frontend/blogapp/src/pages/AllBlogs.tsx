@@ -2,8 +2,9 @@ import { useEffect, useState } from "react"
 import BlogActions from "../redux/blogredux/blog.actions"
 import { useAppDispatch } from "../redux/store"
 import CreateBlog from "./CreateBlog"
-import moment from "moment"
 import { WrapperBlog } from "./AllBlogsstyle"
+import RecipeReviewCard from "./AllBlogs2"
+import Navbar from "./Navbar"
 // import Button from '@mui/material/Button';
 // import TextField from '@mui/material/TextField';
 // import Dialog from '@mui/material/Dialog';
@@ -19,12 +20,14 @@ const AllBlogs = ()=>{
     const [isDrawerOpened, setIsDrawerOpened] = useState(false);
     const [editData, setEditData] = useState<any>(null);
     const [open, setOpen] = useState(false);
+    const [loggedInUser,setLoggedInUser] = useState("")
 
     const getblogs = ()=>{
        dispatch(BlogActions.GETALLBLOGS())
         .then((res)=>{
-          console.log("res",res)
-            setData(res?.payload?.data?.allBlogs)
+          console.log("res",res?.payload?.data)
+            setData(res?.payload?.data?.allBlogs || [])
+            setLoggedInUser(res?.payload?.data?.loggedInUser || "")
         })
         .catch((err)=>{
             console.log("error",err)
@@ -33,6 +36,8 @@ const AllBlogs = ()=>{
       
     }
 
+   
+
     const deleteBlog = (id:any)=>{
       dispatch(BlogActions.deleteBlog(id))
       getblogs()
@@ -40,6 +45,7 @@ const AllBlogs = ()=>{
 
 
     const toggleDrawer = () => {
+      console.log("open")
       setIsDrawerOpened(!isDrawerOpened);
      setOpen(true);
   
@@ -62,19 +68,20 @@ const AllBlogs = ()=>{
        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[editData])
     
-    console.log("datalength",data)
+    console.log("datalength",data.length)
   return <WrapperBlog>
-    <div>
+    <Navbar open={open} setOpen={setOpen} editData={editData} setEditData={setEditData} getblogs={getblogs} toggleDrawer={toggleDrawer}/>
+    {/* <div>
         <button onClick={()=>toggleDrawer()}>Create Blog</button>
         <CreateBlog open={open} setOpen={setOpen} editData={editData} setEditData={setEditData} getblogs={getblogs}/>
-      </div>
+      </div> */}
     <div className="blog-component">
       
         {
           data.length>0 ? data.map((el:any)=>{
             // console.log(el)
             return <div key={el.blog_id}  className="blog-box">
-              <div  className="header-box">
+              {/* <div  className="header-box">
                 <div >
                   <p className="blog-title">{el?.title}</p>
                   <p>{el?.created_by[0]?.name || ""}</p> 
@@ -92,7 +99,9 @@ const AllBlogs = ()=>{
               <hr/>
               <div className="desc-box">
               {el?.description}
-              </div>
+              </div> */}
+
+              <RecipeReviewCard data={el} loggedInUser={loggedInUser}/>
               
             </div>
           }) : <div>NO DATA FOUND</div>
