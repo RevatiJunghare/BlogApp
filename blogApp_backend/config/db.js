@@ -1,9 +1,9 @@
 const mongoose = require("mongoose")
 
 
-const connection = mongoose.connect("mongodb+srv://revati:revati@cluster0.ac6kbta.mongodb.net/blogapp?retryWrites=true&w=majority")
+const connection = mongoose.connect("mongodb+srv://revati:revati@cluster0.ac6kbta.mongodb.net/blogapp?retryWrites=true&w=majority", {useNewUrlParser:true, useUnifiedTopology:true})
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 const userSchema = mongoose.Schema({
@@ -15,14 +15,20 @@ const userSchema = mongoose.Schema({
 
 const UserModel = mongoose.model("usercollection",userSchema)
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 const blogSchema = mongoose.Schema({
     title:{type:String,required:true},
     description:{type:String,required:true},
     status:{type:String,required:true},
     blog_id:{type:String,required:true,unique:true},
-    created_by:{type:String,required:true},
-    category:[{type_of_blog:String}]
+    created_by:{type:String},
+    category:[{type_of_blog:String}],
+    likeCount:{
+                type:Number,
+                default:0
+            }
 },{
     timestamps:{
         createdAt:"created_at",
@@ -32,16 +38,44 @@ const blogSchema = mongoose.Schema({
 
 const BlogModel = mongoose.model("blogcollection",blogSchema)
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+const commentsSchema = mongoose.Schema({
+    comment:{type:String},
+    comment_id:{type:String},
+    parent_comment_id:{
+        type:String,
+        default:null
+    },
+    comment_blog_id:{type:String},
+    comment_user_id:{type:String},
+    likeCount:{
+        type:Number,
+        default:0
+    }
+},{
+    timestamps:{
+        createdAt:"created_at"
+    }
+})
+
+const CommentModel = mongoose.model("comment",commentsSchema)
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 module.exports = {
     connection ,
     UserModel ,
-    BlogModel
+    BlogModel,
+    CommentModel
 }
 
 
 
-// var UserSchema = new mongoose.Schema ({
+// var UserSchema = mongoose.Schema ({
 //     username: String,
 //     password: String,
 //     email: String,
@@ -55,3 +89,17 @@ module.exports = {
 //       category: String
 //     }]  
 // });
+
+// var blogSchema = mongoose.Schema({
+//     title:String,
+//     message:String,
+//     tags:[String],
+//     likeCount:{
+//         type:Number,
+//         default:0
+//     },
+//     createdAt:{
+//         type:Date,
+//         default:new Date()
+//     }
+// })

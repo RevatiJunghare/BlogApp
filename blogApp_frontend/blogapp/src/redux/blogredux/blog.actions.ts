@@ -1,10 +1,18 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { REACT_APP_API_URL } from "../../common";
+import { REACT_APP_API_URL,getAuthToken } from "../../common";
 
+
+// const authToken = localStorage.getItem("token")   
 class BlogActions{
+    
     static GETALLBLOGS = createAsyncThunk("BlogSlice/GETALLBLOGS",()=>{
-       return axios.get(`${Endpoints.allblogs}`)
+      const authToken = getAuthToken()
+      const headers:any = {
+        authorization:authToken
+      }
+      console.log("headers",headers)
+       return axios.get(`${Endpoints.allblogs}`,{headers:headers})
           .then((res:any)=>{
             return res
           })
@@ -37,25 +45,79 @@ class BlogActions{
     })
 
     static createBlog = createAsyncThunk("BlogSlice/createBlog",(data:any)=>{
-      return axios.post(`${Endpoints.createBlog}`,data)
+      const authToken = getAuthToken()
+      const headers:any = {
+        authorization:authToken
+      }
+      return axios.post(`${Endpoints.createBlog}`,data,{headers:headers})
         .then((res:any)=>{
           return res
         })
         .catch((err)=>{
-          console.log("error in create action",err)
+          return err
         })
         .finally(()=>{})
     })
+
+    static allComments = createAsyncThunk("BlogSlice/allComments",(id:any)=>{
+      const authToken = getAuthToken()
+      const headers:any = {
+        authorization:authToken
+      }
+      return axios.post(`${Endpoints.allComment}/${id}`,{},{headers})
+       .then((res:any)=>{
+        return res
+       })
+       .catch((err)=>{
+        return err
+       })
+       .finally(()=>{})
+      
+    })
+
+    static PostComment = createAsyncThunk("BlogSlice/PostComment",({id,data}:any)=>{
+      const authToken = getAuthToken()
+      const headers:any = {
+        authorization:authToken
+      }
+      return axios.post(`${Endpoints.postComment}/${id}`,data,{headers:headers})
+        .then((res:any)=>{
+          return res
+        })
+        .catch((err:any)=>{
+          return err
+        })
+        .finally(()=>{})
+    })
+
+
+   static AddLike = createAsyncThunk("BlogSlice/AddLike",(data:any)=>{
+    const authToken = getAuthToken()
+      const headers:any = {
+        authorization:authToken
+      }
+     return axios.patch(`${Endpoints.AddLike}`,data,{headers:headers})
+      .then((res:any)=>{
+        return res
+      })
+      .catch((err:any)=>{
+        return err
+      })
+      .finally(()=>{})
+   })
 
 
 }
 
 
 class Endpoints{
-    static allblogs = `${REACT_APP_API_URL}/all-blogs`;
-    static deleteblog = `${REACT_APP_API_URL}/delete`;
-    static editBlog  = `${REACT_APP_API_URL}/update-blog`;
-    static createBlog = `${REACT_APP_API_URL}/create-post`;
+    static allblogs = `${REACT_APP_API_URL}/blogs/all-blogs`;
+    static deleteblog = `${REACT_APP_API_URL}/blogs/delete`;
+    static editBlog  = `${REACT_APP_API_URL}/blogs/update-blog`;
+    static createBlog = `${REACT_APP_API_URL}/blogs/create-post`;
+    static allComment = `${REACT_APP_API_URL}/comments/all-comments`;
+     static postComment = `${REACT_APP_API_URL}/comments/add-comment`;
+     static AddLike = `${REACT_APP_API_URL}/comments/add-like`
 }
 
 

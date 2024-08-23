@@ -96,7 +96,7 @@ const CreateBlog :React.FC<Props> = ({open,setOpen,editData,setEditData,getblogs
             
         })
         .catch((err)=>{
-            console.log(err)
+            console.log("error in dispatch CreateBlog file",err)
         })
         .finally(()=>{})
         console.log("values in edit form",values)
@@ -108,7 +108,7 @@ const CreateBlog :React.FC<Props> = ({open,setOpen,editData,setEditData,getblogs
     setUserInput({ ...userInput, [event.target.name]: event.target.value });
   };
 
-  console.log("userinput",userInput)
+  //console.log("userinput",userInput)
 
   return (
     <>

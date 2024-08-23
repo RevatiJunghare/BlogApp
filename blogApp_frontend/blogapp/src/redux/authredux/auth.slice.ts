@@ -4,7 +4,9 @@ import { Authactions } from "./auth.actions"
 
 const initialState = {
     data:{
-        signupData:null
+        signupData:null,
+        loginData:null,
+        isUserLoggedIn:false
     },
     error:false,
     loading:false
@@ -30,6 +32,21 @@ const AuthSlice = createSlice({
             state.error = true;
             state.loading = false
         })
+        .addCase(Authactions.LOGINACTION.pending, (state,action)=>{
+             state.error=false;
+             state.loading=true
+        })
+        .addCase(Authactions.LOGINACTION.fulfilled , (state,action)=>{
+            state.data.loginData = action.payload;
+            state.data.isUserLoggedIn = true
+            state.error = false;
+            state.loading = false
+          })
+        .addCase(Authactions.LOGINACTION.rejected , (state,action)=>{
+              state.data.loginData = null;
+              state.error = true;
+              state.loading = false
+          })
     }
 })
 
