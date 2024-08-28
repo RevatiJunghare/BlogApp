@@ -3,97 +3,57 @@ import { styled } from "styled-components";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
-import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
-import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import moment from "moment";
-import { Badge, Box, TextField } from "@mui/material";
+import {Box} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import UserAvatar from "./Avatar";
 import DetailSingleBlog from "./DetailSingleBlog";
-import { useAppDispatch } from "../redux/store"
+import { useAppDispatch } from "../redux/store";
 import BlogActions from "../redux/blogredux/blog.actions";
 import { useSelector } from "react-redux";
 
-// interface ExpandMoreProps extends IconButtonProps {
-//   expand: boolean;
-// }
-
 interface Props {
   data: any;
-  loggedInUser:string;
+  loggedInUser: string;
 }
 
-// const ExpandMore = styled((props: ExpandMoreProps) => {
-//   const { expand, ...other } = props;
-//   //console.log(props)
-
-//   return <IconButton {...other} />;
-// })(({ theme, expand }) => ({
-//   transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-//   marginLeft: "auto",
-//   transition: theme.transitions.create("transform", {
-//     duration: theme.transitions.duration.shortest,
-//   }),
-// }));
-
-const RecipeReviewCard: React.FC<Props> = ({ data , loggedInUser }) => {
+const RecipeReviewCard: React.FC<Props> = ({ data, loggedInUser }) => {
   const [isShow, setShowHide] = React.useState(false);
   const [open, setOpen] = React.useState(false);
-  const [blogId,setBlogId] = React.useState("");
-  
-  const [commentsData,setCommentsData] = React.useState([])
-  const dispatch = useAppDispatch()
+  const [blogId, setBlogId] = React.useState("");
+  const [commentsData, setCommentsData] = React.useState([]);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const truncLength = 100;
-  const LikeCount = useSelector((store:any)=>store.blogreducer.data.likes)
+  const LikeCount = useSelector((store: any) => store.blogreducer.data.likes);
 
-  // console.log("data", data);
-
-  const getAllComments = (id:any)=>{
+  const getAllComments = (id: any) => {
     dispatch(BlogActions.allComments(id))
-     .then((res:any)=>{
-      console.log("comments11111111111",res?.payload?.data)
-      setCommentsData(res?.payload?.data?.allComments || [])
-     })
-     .catch((err)=>{
-      console.log(err)
-     })
-     .finally(()=>{})
-  }
+      .then((res: any) => {
+        setCommentsData(res?.payload?.data?.allComments || []);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {});
+  };
 
-  console.log("commentsDatacommentsData",commentsData)
+  // const handleLike = (e:any)=>{
+  //   e.preventDefault()
+  //   dispatch(BlogActions.AddLike({blog_id:blogId}))
+  //    .then((res:any)=>{
+  //     // console.log("Likes",res)
+  //    })
+  //    .catch((err:any)=>{
+  //     return err
+  //    })
+  //    .finally(()=>{})
+  // }
 
-  const handleLike = (e:any)=>{
-    e.preventDefault()
-    dispatch(BlogActions.AddLike({blog_id:blogId}))
-     .then((res:any)=>{
-      // console.log("Likes",res)
-     })
-     .catch((err:any)=>{
-      return err
-     })
-     .finally(()=>{})
-  }
-
-  const redirectCommentSection = (id:any)=>{
+  const handleClickOpen = (id: any) => {
     setOpen(true);
-    setBlogId(id)
-    getAllComments(id)
-    console.log("idddddddddd",id)
-  }
-
-  // React.useEffect(()=>{
-  //   getAllComments(blogId)
-  // },[])
-
-
-  const handleClickOpen = (id:any) => {
-    setOpen(true);
-    setBlogId(id)
-    getAllComments(id)
-    console.log("idddddddddd",id)
+    setBlogId(id);
+    getAllComments(id);
   };
 
   const handleClose = () => {
@@ -101,47 +61,70 @@ const RecipeReviewCard: React.FC<Props> = ({ data , loggedInUser }) => {
   };
 
   return (
-    <Card sx={{
-      backgroundColor: '#fff',
-      color: 'rgba(0, 0, 0, 0.87)',
-      transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-      borderRadius: '4px',
-      overflow: 'hidden',
-      maxWidth: '345px',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      padding:"10px"
-    }} >
-      
+    <Card
+      sx={{
+        backgroundColor: "#fff",
+        color: "rgba(0, 0, 0, 0.87)",
+        transition: "box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+        borderRadius: "4px",
+        overflow: "hidden",
+        maxWidth: "345px",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        padding: "10px",
+      }}
+    >
       <CardMedia
         sx={{ height: 140 }}
         image="https://st2.depositphotos.com/1350793/9161/i/450/depositphotos_91612518-stock-photo-blog-concept-with-man-holding.jpg"
         title="green iguana"
       />
-      <CardContent style={{padding:"0px"}}>
-      <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-  <Typography style={{ fontSize: '24px', fontWeight: 'bold' }} variant="h5" component="div">
-    {data?.title}
-  </Typography>
-  <Typography style={{ fontSize: '16px', color: 'gray' }} variant="h5" component="div">
-    {moment(data?.created_at).format('yyyy-MM-DD')}
-  </Typography>
-</Box>
-<Typography style={{ fontSize: '12px', color: 'gray',textAlign:"left",marginBottom:"10px" }} variant="body2" component="div">
-  {data?.userObject?.name}
-</Typography>
+      <CardContent style={{ padding: "0px" }}>
+        <Box
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            style={{ fontSize: "24px", fontWeight: "bold" }}
+            variant="h5"
+            component="div"
+          >
+            {data?.title}
+          </Typography>
+          <Typography
+            style={{ fontSize: "16px", color: "gray" }}
+            variant="h5"
+            component="div"
+          >
+            {moment(data?.created_at).format("yyyy-MM-DD")}
+          </Typography>
+        </Box>
+        <Typography
+          style={{
+            fontSize: "12px",
+            color: "gray",
+            textAlign: "left",
+            marginBottom: "10px",
+          }}
+          variant="body2"
+          component="div"
+        >
+          {data?.userObject?.name}
+        </Typography>
 
         <Typography
           variant="body2"
           color="text.secondary"
-          style={{ overflowWrap: "break-word" ,textAlign:"left"}}
+          style={{ overflowWrap: "break-word", textAlign: "left" }}
         >
           {isShow
             ? data?.description
             : data?.description.substring(0, truncLength)}{" "}
-          
           {data?.description.length > truncLength ? (
             <a
               onClick={() => {
@@ -152,7 +135,7 @@ const RecipeReviewCard: React.FC<Props> = ({ data , loggedInUser }) => {
                 }
               }}
               id="readbtn"
-              style={{cursor:"pointer"}}
+              style={{ cursor: "pointer" }}
             >
               {isShow ? "Read Less" : "Read more"}
             </a>
@@ -160,9 +143,16 @@ const RecipeReviewCard: React.FC<Props> = ({ data , loggedInUser }) => {
             ""
           )}
         </Typography>
-        
-        <DetailSingleBlog handleClose={handleClose} open={open} data={data} loggedInUser={loggedInUser} commentsData={commentsData} blogId={blogId} getAllComments={getAllComments}/>
 
+        <DetailSingleBlog
+          handleClose={handleClose}
+          open={open}
+          data={data}
+          loggedInUser={loggedInUser}
+          commentsData={commentsData}
+          blogId={blogId}
+          getAllComments={getAllComments}
+        />
       </CardContent>
       {/* <CardActions disableSpacing>
       <Badge badgeContent={LikeCount?.data?.Likecount} color="primary" style={{ marginRight: '30px' }}>
@@ -178,27 +168,23 @@ const RecipeReviewCard: React.FC<Props> = ({ data , loggedInUser }) => {
         <UserAvatar name={loggedInUser}/>
         <TextField id="input-with-sx" label="Add a comment..." variant="standard" />
       </Box> */}
-
-
     </Card>
   );
 };
 
 export default RecipeReviewCard;
 
-
-
 export const wrapbox = styled.div`
-background-color: #fff;
-    color: rgba(0, 0, 0, 0.87);
-    -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    border-radius: 4px;
-    /* box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12); */
-    overflow: hidden;
-    max-width: 345px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-`
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.87);
+  -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  border-radius: 4px;
+  /* box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12); */
+  overflow: hidden;
+  max-width: 345px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;

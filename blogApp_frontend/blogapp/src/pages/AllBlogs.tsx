@@ -1,17 +1,10 @@
 import { useEffect, useState } from "react"
 import BlogActions from "../redux/blogredux/blog.actions"
 import { useAppDispatch } from "../redux/store"
-import CreateBlog from "./CreateBlog"
 import { WrapperBlog } from "./AllBlogsstyle"
 import RecipeReviewCard from "./AllBlogs2"
 import Navbar from "./Navbar"
-// import Button from '@mui/material/Button';
-// import TextField from '@mui/material/TextField';
-// import Dialog from '@mui/material/Dialog';
-// import DialogActions from '@mui/material/DialogActions';
-// import DialogContent from '@mui/material/DialogContent';
-// import DialogContentText from '@mui/material/DialogContentText';
-// import DialogTitle from '@mui/material/DialogTitle';
+import { Pagination, Stack } from "@mui/material"
 
 
 const AllBlogs = ()=>{
@@ -20,12 +13,19 @@ const AllBlogs = ()=>{
     const [isDrawerOpened, setIsDrawerOpened] = useState(false);
     const [editData, setEditData] = useState<any>(null);
     const [open, setOpen] = useState(false);
-    const [loggedInUser,setLoggedInUser] = useState("")
+    const [loggedInUser,setLoggedInUser] = useState("");
+    const [page, setPage] = useState(1);
+    const [totalpages,setTotalPages] = useState(0)
+    const itemsPerPage = 10;
+   
 
-    const getblogs = ()=>{
-       dispatch(BlogActions.GETALLBLOGS())
+    const getblogs = (currentPage:number)=>{
+      const offset = currentPage
+      
+      
+       dispatch(BlogActions.GETALLBLOGS({itemsPerPage,offset}))
         .then((res)=>{
-          console.log("res",res?.payload?.data)
+            setTotalPages(res?.payload?.data?.totalPages)
             setData(res?.payload?.data?.allBlogs || [])
             setLoggedInUser(res?.payload?.data?.loggedInUser || "")
         })
@@ -38,75 +38,52 @@ const AllBlogs = ()=>{
 
    
 
-    const deleteBlog = (id:any)=>{
-      dispatch(BlogActions.deleteBlog(id))
-      getblogs()
-    }
+    // const deleteBlog = (id:any)=>{
+    //   dispatch(BlogActions.deleteBlog(id))
+    //   getblogs()
+    // }
 
 
     const toggleDrawer = () => {
-      console.log("open")
       setIsDrawerOpened(!isDrawerOpened);
-     setOpen(true);
-  
+      setOpen(true)
       if (isDrawerOpened) {
-        setEditData(null);
+        setEditData(null)
       }
-    };
-
-    const handleEditIconFn = (data:any)=>{
-      setEditData(data)
-      toggleDrawer()
     }
+
+    // const handleEditIconFn = (data:any)=>{
+    //   setEditData(data)
+    //   toggleDrawer()
+    // }
+
+    const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+      setPage(value);
+  };
 
   
 
     useEffect(()=>{
       if (!editData) {
-        getblogs() 
+        getblogs(page) 
       }
        // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[editData])
+    },[editData,page])
     
-    console.log("datalength",data.length)
   return <WrapperBlog>
     <Navbar open={open} setOpen={setOpen} editData={editData} setEditData={setEditData} getblogs={getblogs} toggleDrawer={toggleDrawer}/>
-    {/* <div>
-        <button onClick={()=>toggleDrawer()}>Create Blog</button>
-        <CreateBlog open={open} setOpen={setOpen} editData={editData} setEditData={setEditData} getblogs={getblogs}/>
-      </div> */}
     <div className="blog-component">
-      
-        {
+      {
           data.length>0 ? data.map((el:any)=>{
-            // console.log(el)
             return <div key={el.blog_id}  className="blog-box">
-              {/* <div  className="header-box">
-                <div >
-                  <p className="blog-title">{el?.title}</p>
-                  <p>{el?.created_by[0]?.name || ""}</p> 
-                </div>
-                <div >
-                   <p>{moment(el?.created_at).format("yyyy-MM-DD")}</p>
-                   <div style={{display:"flex"}}>
-                      <button onClick={()=>deleteBlog(el.blog_id)}>Delete</button>
-                      <div >
-                        <button onClick={() => handleEditIconFn(el)}>Edit</button>
-                      </div>
-                   </div>
-                </div>
-              </div>
-              <hr/>
-              <div className="desc-box">
-              {el?.description}
-              </div> */}
-
               <RecipeReviewCard data={el} loggedInUser={loggedInUser}/>
-              
             </div>
           }) : <div>NO DATA FOUND</div>
         }
     </div>
+    <Stack spacing={2} sx={{ alignItems: "center", marginTop: "20px" }}>
+        <Pagination count={totalpages} page={page} onChange={handlePageChange} />
+    </Stack>
   </WrapperBlog>
 }
 

@@ -37,7 +37,7 @@ postRouter.post("/create-post", async (req, res) => {
   postRouter.get("/all-blogs", async (req, res) => {
 
     //const loginToken = localStorage.getItem("backendloginToken")
-    console.log("loginToken",req?.decodedToken)
+    // console.log("loginToken",req?.decodedToken)
     const loggedInUser = req?.decodedToken?.user?.name
     
     try {
@@ -88,12 +88,12 @@ postRouter.post("/create-post", async (req, res) => {
      //So, the line is creating a new array (countPipeline) that includes all the stages from the pipeline array and an additional $count stage to count the total number of documents. This new pipeline will be used to retrieve the count of documents matching the aggregation criteria.
   
   
-  
+     let limit = Number(req.query.limit)
+     let offset = Number(req.query.offset)
   
       if(req.query.limit && req.query.offset){
   
-        let limit = Number(req.query.limit)
-        let offset = Number(req.query.offset)
+        
   
         let limit_obj = {
           $limit:Number(req.query.limit)
@@ -105,6 +105,8 @@ postRouter.post("/create-post", async (req, res) => {
   
         pipeline.push(offset_obj, limit_obj)
       }
+
+      
   
       // const countStage = {$count:"totalBlogs"}
       // pipeline.push(countStage)
@@ -150,7 +152,6 @@ postRouter.post("/create-post", async (req, res) => {
       })
       
       const user_data = await UserModel.find({user_id:{$in:user_ids}},{name:1,user_id:1,_id:0})
-      console.log("user_data",user_data)
 
       const user_dataID_mappping = {}
       user_data.map((user)=>{
@@ -161,9 +162,12 @@ postRouter.post("/create-post", async (req, res) => {
         blog["userObject"] = user_dataID_mappping[blog.created_by]
         return blog
       })
+
+      const total_pages = Math.ceil(countResult[0].totalBlogs / limit)
+
+      console.log("total Pages",total_pages,countResult[0].totalBlogs,limit)
       // Send both the count and the aggregated data in the response
-      res.send({ allBlogs: blogs, totalCount: countResult[0].totalBlogs ,loggedInUser:loggedInUser });
-      // console.log("allBlogs",blogs)
+      res.send({ allBlogs: blogs, totalCount: countResult[0].totalBlogs ,loggedInUser:loggedInUser, totalPages:total_pages, perPage:limit});
   
     } catch (err) {
       console.log(err)
