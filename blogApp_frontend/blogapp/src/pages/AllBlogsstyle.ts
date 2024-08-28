@@ -6,6 +6,7 @@ import { styled } from "styled-components";
 export const WrapperBlog = styled.div`
 & {
     width:100%;
+    background-color:white;
     .blog-component{
         display:grid;
         grid-template-columns: repeat(3, 1fr);
