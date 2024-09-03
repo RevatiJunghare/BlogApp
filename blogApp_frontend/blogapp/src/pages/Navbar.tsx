@@ -66,6 +66,14 @@ const Navbar: React.FC<Props> = ({toggleDrawer,open,setOpen,editData,setEditData
             >
               <MenuIcon />
             </IconButton>
+            {/* Search Bar */}
+            <TextField
+              variant="outlined"
+              placeholder="Search blogs..."
+              size="small"
+              sx={{ ml: 2, width: "300px" }} // Adjust the width as needed
+              inputProps={{ style: { padding: "8px 14px" } }} // Adjust padding as needed
+            />
             <Menu id="menu-appbar" anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: "bottom",
@@ -93,6 +101,7 @@ const Navbar: React.FC<Props> = ({toggleDrawer,open,setOpen,editData,setEditData
                   setEditData={setEditData}
                   getblogs={getblogs}
                 />
+                
               </Box>
             </Menu>
           </Box>

@@ -6,13 +6,13 @@ import { REACT_APP_API_URL,getAuthToken } from "../../common";
 // const authToken = localStorage.getItem("token")   
 class BlogActions{
     
-    static GETALLBLOGS = createAsyncThunk("BlogSlice/GETALLBLOGS",({itemsPerPage,offset}:any)=>{
+    static GETALLBLOGS = createAsyncThunk("BlogSlice/GETALLBLOGS",({itemsPerPage,offset,searchquery}:any)=>{
       const authToken = getAuthToken()
       const headers:any = {
         authorization:authToken
       }
       // console.log("headers",headers)
-       return axios.get(`${Endpoints.allblogs}?limit=${itemsPerPage}&offset=${offset}`,{headers:headers})
+       return axios.get(`${Endpoints.allblogs}?limit=${itemsPerPage}&offset=${offset}&search=${searchquery}`,{headers:headers})
           .then((res:any)=>{
             return res
           })
