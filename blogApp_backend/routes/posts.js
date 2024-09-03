@@ -69,13 +69,21 @@ postRouter.post("/create-post", async (req, res) => {
         // } 
       ]
   
-      if(req.query.search){
-        let search_blog = req.query.search
-  
-        let search_obj = {$match:{$or:[{"title":{$regex:search_blog,'$options': 'i'}},{"description":{$regex:search_blog,'$options': 'i'}}]}}
-  
-        pipeline.splice(1,0,search_obj)
-     }
+      if (req.query.search !== undefined) {
+        let search_blog = req.query.search.trim(); // Trim to remove any extra whitespace
+    
+        if (search_blog) {
+            let search_obj = {
+                $match: {
+                    $or: [
+                        { "title": { $regex: search_blog, '$options': 'i' } },
+                        { "description": { $regex: search_blog, '$options': 'i' } }
+                    ]
+                }
+            };
+            pipeline.splice(1, 0, search_obj);
+        }
+    }
     // console.log("pipeline",pipeline)
   
      // Execute an additional aggregation stage to count the total number of documents
@@ -165,8 +173,10 @@ postRouter.post("/create-post", async (req, res) => {
 
       const total_pages = Math.ceil(countResult[0].totalBlogs / limit)
 
-      console.log("total Pages",total_pages,countResult[0].totalBlogs,limit)
+     // console.log("total Pages",total_pages,countResult[0].totalBlogs,limit)
       // Send both the count and the aggregated data in the response
+      
+      console.log("countResult",blogs)
       res.send({ allBlogs: blogs, totalCount: countResult[0].totalBlogs ,loggedInUser:loggedInUser, totalPages:total_pages, perPage:limit});
   
     } catch (err) {

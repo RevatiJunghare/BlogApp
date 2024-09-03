@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useAppDispatch } from '../redux/store';
 import BlogNetworkservice from '../redux/blogredux/blog.networkservice';
 import BlogActions from '../redux/blogredux/blog.actions';
+import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 interface Props{
     open?:any;
@@ -16,10 +17,13 @@ interface Props{
     editData?:any;
     setEditData?:any;
     getblogs?:any;
+    // itemsPerPage?:any;
+    offset?:any;
+    searchquery?:any;
 }
  
 
-const CreateBlog :React.FC<Props> = ({open,setOpen,editData,setEditData,getblogs})=>{
+const CreateBlog :React.FC<Props> = ({open,setOpen,editData,setEditData,getblogs,offset,searchquery})=>{
   //const [open, setOpen] = React.useState(false);
   const dispatch = useAppDispatch();
   const [userInput, setUserInput] = React.useState({
@@ -54,7 +58,7 @@ const CreateBlog :React.FC<Props> = ({open,setOpen,editData,setEditData,getblogs
 
   const handleSubmit = (values:any)=>{
 
-
+console.log(values)
     if(!editData?.blog_id){
         const data = {
             title:values.title.trim(),
@@ -63,7 +67,7 @@ const CreateBlog :React.FC<Props> = ({open,setOpen,editData,setEditData,getblogs
         }
         dispatch(BlogActions.createBlog(data))
         .then((res:any)=>{
-            getblogs()
+            getblogs(offset,searchquery)
             if(res?.status === 200){
                 alert(res?.data?.message)
             }else{
@@ -87,7 +91,7 @@ const CreateBlog :React.FC<Props> = ({open,setOpen,editData,setEditData,getblogs
         }
         BlogNetworkservice.editBlog(data,editData?.blog_id)
         .then((res)=>{
-            getblogs()
+            getblogs(offset,searchquery)
             if(res?.status === 200){
                 alert(res?.data?.message)
             }else{
@@ -159,7 +163,7 @@ const CreateBlog :React.FC<Props> = ({open,setOpen,editData,setEditData,getblogs
             value={userInput?.description}
             onChange={handleChange}
           />
-          <TextField
+          {/* <TextField
             autoFocus
             margin="dense"
             id="status"
@@ -170,7 +174,24 @@ const CreateBlog :React.FC<Props> = ({open,setOpen,editData,setEditData,getblogs
             variant="standard"
             value={userInput?.status}
             onChange={handleChange}
-          />
+          /> */}
+          <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Blog Status</InputLabel>
+        <Select
+        variant="standard"
+          labelId="demo-simple-select-label"
+          id="status"
+            name="status"
+          value={userInput?.status}
+          label="Blog Status"
+          onChange={handleChange}
+        >
+          <MenuItem value={"published"}>Published</MenuItem>
+          <MenuItem value={"draft"}>Draft</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
         </DialogContent>
         <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
