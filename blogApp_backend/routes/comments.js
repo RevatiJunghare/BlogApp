@@ -29,7 +29,7 @@ commentRouter.post("/add-comment/:id", async (req, res) => {
   try {
     const comment = new CommentModel(req.body);
     await comment.save();
-    console.log("hiiiiiiiiiiiiii",req.body)
+    //console.log("hiiiiiiiiiiiiii",req.body)
     res.send({ message: "Comment Added to This Post" });
   } catch (err) {
     res.status(400).send({ message: "Comment Not Added" });
@@ -68,7 +68,7 @@ commentRouter.post("/all-comments/:id", async (req, res) => {
       });
       
       res.send({ allComments: allComments });
-      console.log("commentss",allComments)
+      //console.log("commentss",allComments)
     } else {
       res.status(400).send({ message: "wrong Blog id" });
       console.log("eror in blog id");

@@ -10,7 +10,7 @@ import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import moment from "moment";
 import "./DetailSingleBlog.css";
-import { useAppDispatch } from "../redux/store";
+import { useAppDispatch, useAppSelector } from "../redux/store";
 import BlogActions from "../redux/blogredux/blog.actions";
 import { useSelector } from "react-redux";
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
@@ -30,7 +30,7 @@ const DetailSingleBlog: React.FC<Props>=({handleClose,open,data,loggedInUser,com
     comment:""
   })
   const dispatch = useAppDispatch();
-  const LikeCount = useSelector((store:any)=>store.blogreducer.data.likes)
+  const LikeCount = useAppSelector((store:any)=>store?.blogreducer?.data?.likes)
 
   const handleChange = (e:any)=>{
     const {name,value} = e.target
@@ -50,6 +50,8 @@ const DetailSingleBlog: React.FC<Props>=({handleClose,open,data,loggedInUser,com
      })
      .finally(()=>{})
   }
+
+  // console.log("LikeCount",LikeCount?.data?.Likecount)
 
   const handleSubmit = (e:any)=>{
      e.preventDefault()

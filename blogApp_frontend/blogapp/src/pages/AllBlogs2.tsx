@@ -76,6 +76,7 @@ const RecipeReviewCard: React.FC<Props> = ({ data, loggedInUser }) => {
         justifyContent: "space-between",
         padding: "10px",
       }}
+      
     >
       <CardMedia
         sx={{ height: 140 }}
@@ -124,7 +125,7 @@ const RecipeReviewCard: React.FC<Props> = ({ data, loggedInUser }) => {
           style={{ overflowWrap: "break-word", textAlign: "left" }}
         >
           {isShow
-            ? data?.description
+            ? data?.description 
             : data?.description.substring(0, truncLength)}{" "}
           {data?.description.length > truncLength ? (
             <a

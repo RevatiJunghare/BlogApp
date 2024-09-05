@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({limit:"30mb",extended:true}))
 const postRouter = express.Router()
 
 postRouter.post("/create-post", async (req, res) => {
-    console.log("token1234", req?.decodedToken?.user);
+    //console.log("token1234", req?.decodedToken?.user);
     // console.log(req)
     try {
       
@@ -30,6 +30,75 @@ postRouter.post("/create-post", async (req, res) => {
       console.log("errrrrrrrr", err);
     }
   });
+
+
+
+  postRouter.post("/loged-in-user-blogs",async(req,res)=>{
+    //console.log( " req?.decodedToken?.user",req?.decodedToken?.user?.user_id)
+    try{
+      const userId = req?.decodedToken?.user?.user_id;
+
+      const pipeline = [
+        {
+          
+          $match:{
+            created_by: userId,
+            status:"published"}
+        },
+        {
+          $project:{_id:0}
+        }
+         
+      ]
+  
+      if (req.body.search !== undefined) {
+        let search_blog = req.body.search.trim(); // Trim to remove any extra whitespace
+    
+        if (search_blog) {
+            let search_obj = {
+                $match: {
+                    $or: [
+                        { "title": { $regex: search_blog, '$options': 'i' } },
+                        { "description": { $regex: search_blog, '$options': 'i' } }
+                    ]
+                }
+            };
+            pipeline.splice(1, 0, search_obj);
+        }
+    }
+    
+     const countPipeline = [...pipeline, { $count: "totalBlogs" }];  
+
+     let limit = Number(req.body.limit)
+     let offset = Number(req.body.offset)
+  
+      if(req.body.limit && req.body.offset){
+        let limit_obj = {
+          $limit:Number(req.body.limit)
+        }
+  
+        let offset_obj = {
+          $skip: limit * (offset - 1)
+        }
+  
+        pipeline.push(offset_obj, limit_obj)
+      }
+
+      const [blogs, countResult] = await Promise.all([
+       BlogModel.aggregate(pipeline),
+       BlogModel.aggregate(countPipeline)
+      ]);
+
+      const total_pages = Math.ceil(countResult[0].totalBlogs / limit)
+
+      //const userBlogs = await BlogModel.find({created_by:req?.decodedToken?.user?.user_id})
+      res.send({"blogs":blogs,"user":req?.decodedToken?.user,"totalCount": countResult[0].totalBlogs,totalPages:total_pages, perPage:limit})
+      console.log("total_pages",countResult[0].totalBlogs)
+    }catch(err){
+      res.send({"error":err})
+    }
+
+  })
   
   
   
@@ -39,6 +108,7 @@ postRouter.post("/create-post", async (req, res) => {
     //const loginToken = localStorage.getItem("backendloginToken")
     // console.log("loginToken",req?.decodedToken)
     const loggedInUser = req?.decodedToken?.user?.name
+    // console.log( " req?.decodedToken?.user",req?.decodedToken?.user?.user_id)
     
     try {
       // console.log("pagination",req.query)
@@ -176,7 +246,7 @@ postRouter.post("/create-post", async (req, res) => {
      // console.log("total Pages",total_pages,countResult[0].totalBlogs,limit)
       // Send both the count and the aggregated data in the response
       
-      console.log("countResult",blogs)
+      // console.log("countResult",blogs)
       res.send({ allBlogs: blogs, totalCount: countResult[0].totalBlogs ,loggedInUser:loggedInUser, totalPages:total_pages, perPage:limit});
   
     } catch (err) {

@@ -58,6 +58,7 @@ const AllBlogs : React.FC<Props>= ()=>{
        let offset = currentPage
        dispatch(BlogActions.GETALLBLOGS({itemsPerPage,offset,searchquery:searchQuery}))
         .then((res)=>{
+          console.log(res?.payload?.data)
             setTotalPages(res?.payload?.data?.totalPages)
             setData(res?.payload?.data?.allBlogs || [])
             setLoggedInUser(res?.payload?.data?.loggedInUser || "")
