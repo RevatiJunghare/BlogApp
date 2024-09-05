@@ -30,7 +30,7 @@ function getInitials(name:any) {
   
     return <div className="avatar-container">
     <div className="avatar">{initials}</div>
-    <div className="tooltip">{name}</div>
+    {/* <div className="tooltip">{name}</div> */}
   </div>
 //     <div style={{display: 'inline-block',
 //     width: '40px',
