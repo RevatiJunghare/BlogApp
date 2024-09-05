@@ -3,6 +3,7 @@ import AllBlogs from './AllBlogs'
 import Signup from './Signup'
 import Login from './Login'
 import PrivateRoute from './PrivateRoute'
+import Dashboard from './Dashboard'
 
 const AllRoutes = () => {
 
@@ -11,12 +12,13 @@ const AllRoutes = () => {
     <Routes>
       
         <Route path="/allblogs" element={<PrivateRoute>
-        <AllBlogs/>
+        <AllBlogs />
         </PrivateRoute>
         }/>
       
         <Route path="/" element={<Signup/>}/>
         <Route path="/login" element={<Login/>}/>
+        <Route path="/dashboard" element={<Dashboard/>}/>
     </Routes>
   )
 }

@@ -69,6 +69,7 @@ const RecipeReviewCard: React.FC<Props> = ({ data, loggedInUser }) => {
         borderRadius: "4px",
         overflow: "hidden",
         maxWidth: "345px",
+        width:"345px",
         height: "100%",
         display: "flex",
         flexDirection: "column",

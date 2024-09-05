@@ -22,6 +22,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../assets/Infinity.png";
 import CreateBlog from "./CreateBlog";
 import { TextField } from "@mui/material";
+import UserAvatar from "./Avatar"
 
 interface Props {
   toggleDrawer: any;
@@ -44,23 +45,17 @@ const AllBlogs : React.FC<Props>= ()=>{
     const [totalpages,setTotalPages] = useState(0)
     const itemsPerPage = 10;
     const [searchQuery, setSearchQuery] = useState("");
-    
-    
-
-
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {setAnchorElNav(event.currentTarget)};
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {setAnchorElUser(event.currentTarget)};
-  const handleCloseNavMenu = () => {setAnchorElNav(null)};
-  const handleCloseUserMenu = () => {setAnchorElUser(null)};
+    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {setAnchorElNav(event.currentTarget)};
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {setAnchorElUser(event.currentTarget)};
+    const handleCloseNavMenu = () => {setAnchorElNav(null)};
+    const handleCloseUserMenu = () => {setAnchorElUser(null)};
    
 
     const getblogs = (currentPage:number,searchQuery: string)=>{
-      
-      let offset = currentPage
-      
+       let offset = currentPage
        dispatch(BlogActions.GETALLBLOGS({itemsPerPage,offset,searchquery:searchQuery}))
         .then((res)=>{
             setTotalPages(res?.payload?.data?.totalPages)
@@ -71,10 +66,7 @@ const AllBlogs : React.FC<Props>= ()=>{
             console.log("error",err)
         })
         .finally(()=>{})
-      
     }
-
-   
 
     // const deleteBlog = (id:any)=>{
     //   dispatch(BlogActions.deleteBlog(id))
@@ -107,14 +99,6 @@ const AllBlogs : React.FC<Props>= ()=>{
     setSearchQuery(query || "");
   };
 
-  
-
-    // useEffect(()=>{
-    //   if (!editData) {
-    //     getblogs(page, searchQuery) 
-    //   }
-    //    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // },[editData,page,searchQuery])
 
     useEffect(() => {
       const delayDebounceFn = setTimeout(() => {
@@ -127,9 +111,7 @@ const AllBlogs : React.FC<Props>= ()=>{
   }, [editData, page,searchQuery]);
     
   return <WrapperBlog>
-
-
-<AppBar position="fixed" style={{ backgroundColor: "white" }}>
+   <AppBar position="fixed" style={{ backgroundColor: "white" }}>
       <Container sx={{ backgroundColor: "#ffffff", color: "black" }}>
         <Toolbar disableGutters>
           {/* Logo */}
@@ -166,8 +148,8 @@ const AllBlogs : React.FC<Props>= ()=>{
               variant="outlined"
               placeholder="Search blogs..."
               size="small"
-              sx={{ ml: 2, width: "300px" }} // Adjust the width as needed
-              inputProps={{ style: { padding: "8px 14px" } }} // Adjust padding as needed
+              sx={{ ml: 2, width: "300px" }} 
+              inputProps={{ style: { padding: "8px 14px" } }} 
               onChange={(e:any)=>handleSearch(e)}
             />
             <Menu id="menu-appbar" anchorEl={anchorElNav}
@@ -196,7 +178,6 @@ const AllBlogs : React.FC<Props>= ()=>{
                   editData={editData}
                   setEditData={setEditData}
                   getblogs={getblogs}
-                  // itemsPerPage={itemsPerPage}
                 offset={page}
                 searchquery={searchQuery}
                 />
@@ -231,7 +212,6 @@ const AllBlogs : React.FC<Props>= ()=>{
                 editData={editData}
                 setEditData={setEditData}
                 getblogs={getblogs}
-                // itemsPerPage={itemsPerPage}
                 offset={page}
                 searchquery={searchQuery}
               />
@@ -241,8 +221,8 @@ const AllBlogs : React.FC<Props>= ()=>{
               variant="outlined"
               placeholder="Search blogs..."
               size="small"
-              sx={{ ml: 2, width: "300px" }} // Adjust the width as needed
-              inputProps={{ style: { padding: "8px 14px" } }} // Adjust padding as needed
+              sx={{ ml: 2, width: "300px" }} 
+              inputProps={{ style: { padding: "8px 14px" } }} 
               value={searchQuery}
               onChange={(e:any)=>handleSearch(e)}
             />
@@ -252,7 +232,7 @@ const AllBlogs : React.FC<Props>= ()=>{
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+              <UserAvatar name={loggedInUser} />
               </IconButton>
             </Tooltip>
             <Menu
