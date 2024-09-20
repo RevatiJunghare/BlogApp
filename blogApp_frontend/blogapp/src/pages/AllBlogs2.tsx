@@ -60,6 +60,8 @@ const RecipeReviewCard: React.FC<Props> = ({ data, loggedInUser }) => {
     setOpen(false);
   };
 
+  console.log("LikeCount",LikeCount?.data?.Likecount)
+
   return (
     <Card
       sx={{

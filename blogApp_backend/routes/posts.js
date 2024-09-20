@@ -91,7 +91,6 @@ postRouter.post("/create-post", async (req, res) => {
 
       const total_pages = Math.ceil(countResult[0].totalBlogs / limit)
 
-      //const userBlogs = await BlogModel.find({created_by:req?.decodedToken?.user?.user_id})
       res.send({"blogs":blogs,"user":req?.decodedToken?.user,"totalCount": countResult[0].totalBlogs,totalPages:total_pages, perPage:limit})
       console.log("total_pages",countResult[0].totalBlogs)
     }catch(err){

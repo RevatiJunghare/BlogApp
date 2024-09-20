@@ -15,18 +15,7 @@ function getInitials(name:any) {
   const UserAvatar:React.FC<Props>=({ name}) =>{
     const initials = getInitials(name);
   
-    // const avatarStyle = {
-    //   display: 'inline-block',
-    //   width: '40px',
-    //   height: '40px',
-    //   borderRadius: '50%',
-    //   backgroundColor: '#007bff',
-    //   color: '#fff',
-    //   textAlign: 'center',
-    //   lineHeight: '40px',
-    //   fontSize: '16px',
-    //   fontWeight: 'bold',
-    // };
+    
   
     return <div className="avatar-container">
     <div className="avatar">{initials}</div>

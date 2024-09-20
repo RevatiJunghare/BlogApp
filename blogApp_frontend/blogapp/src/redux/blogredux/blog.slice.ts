@@ -4,12 +4,13 @@ import BlogActions from "./blog.actions";
 
 const initialState = {
     data:{
-        blogData:null,
+        blogData:[],
         deleted:null,
         createBlog:null,
         AllComments:null,
         UserComment:null,
-        likes:null
+        likes:0,
+        userBlogData:null
     },
     error:false,
     loading:false
@@ -98,6 +99,19 @@ const BlogSlice = createSlice({
             state.loading = false
         })
         .addCase(BlogActions.AddLike.rejected,(state)=>{
+            state.error = true,
+            state.loading = false
+        })
+        .addCase(BlogActions.GETUSERBLOGS.pending,(state)=>{
+            state.error = false,
+            state.loading = true
+        })
+        .addCase(BlogActions.GETUSERBLOGS.fulfilled,(state,action)=>{
+            state.data.userBlogData = action.payload,
+            state.error = false,
+            state.loading = false
+        })
+        .addCase(BlogActions.GETUSERBLOGS.rejected,(state)=>{
             state.error = true,
             state.loading = false
         })

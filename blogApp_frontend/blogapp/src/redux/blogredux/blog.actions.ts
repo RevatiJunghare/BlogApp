@@ -22,6 +22,22 @@ class BlogActions{
           .finally(()=>{})
     })
 
+    static GETUSERBLOGS = createAsyncThunk("BlogSlice/GETUSERBLOGS",(data:any)=>{
+      const authToken = getAuthToken()
+      const headers:any = {
+        authorization:authToken
+      }
+      
+       return axios.post(`${Endpoints.userblogs}`,data,{headers:headers})
+          .then((res:any)=>{
+            return res
+          })
+          .catch((err)=>{
+            console.log("error in allblogs action",err)
+          })
+          .finally(()=>{})
+    })
+
     static deleteBlog = createAsyncThunk("BlogSlice/deleteBlog",(id:any)=>{
        return axios.delete(`${Endpoints.deleteblog}/${id}`)
          .then((res:any)=>{
@@ -112,6 +128,7 @@ class BlogActions{
 
 class Endpoints{
     static allblogs = `${REACT_APP_API_URL}/blogs/all-blogs`;
+    static userblogs = `${REACT_APP_API_URL}/blogs/loged-in-user-blogs`
     static deleteblog = `${REACT_APP_API_URL}/blogs/delete`;
     static editBlog  = `${REACT_APP_API_URL}/blogs/update-blog`;
     static createBlog = `${REACT_APP_API_URL}/blogs/create-post`;

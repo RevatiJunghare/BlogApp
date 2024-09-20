@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from "../redux/store";
 import BlogActions from "../redux/blogredux/blog.actions";
 import { useSelector } from "react-redux";
 import CloseSharpIcon from '@mui/icons-material/CloseSharp';
+import { ToastContainer, toast } from "react-toastify";
 
 interface Props {
   handleClose: any;
@@ -32,6 +33,7 @@ const DetailSingleBlog: React.FC<Props>=({handleClose,open,data,loggedInUser,com
   const dispatch = useAppDispatch();
   const LikeCount = useAppSelector((store:any)=>store?.blogreducer?.data?.likes)
 
+
   const handleChange = (e:any)=>{
     const {name,value} = e.target
     setUserComment((prev:any)=>({
@@ -42,8 +44,11 @@ const DetailSingleBlog: React.FC<Props>=({handleClose,open,data,loggedInUser,com
 
   const handleLike = (e:any)=>{
     e.preventDefault()
+    console.log("like1")
     dispatch(BlogActions.AddLike({blog_id:blogId}))
      .then((res:any)=>{
+      console.log("likes",res?.payload?.data?.Likecount)
+      toast.success(res?.payload?.data?.message)
      })
      .catch((err:any)=>{
       return err
@@ -68,6 +73,7 @@ const DetailSingleBlog: React.FC<Props>=({handleClose,open,data,loggedInUser,com
   
 
   return (
+    <>
     <React.Fragment>
       <Dialog
         open={open}
@@ -195,7 +201,10 @@ const DetailSingleBlog: React.FC<Props>=({handleClose,open,data,loggedInUser,com
         </Card>
 
       </Dialog>
+      
     </React.Fragment>
+    <ToastContainer />
+    </>
   );
 };
 
